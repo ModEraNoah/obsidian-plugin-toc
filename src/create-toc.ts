@@ -1,4 +1,4 @@
-import { CachedMetadata, HeadingCache, Notice } from "obsidian";
+import { CachedMetadata, Editor, HeadingCache, Notice } from "obsidian";
 import { TableOfContentsPluginSettings } from "./types";
 import anchor from "anchor-markdown-header";
 
@@ -104,3 +104,44 @@ export const createToc = (
     settings.title ? settings.title : "Table of Contents"
   }\n ${links.join("\n")}\n`;
 };
+
+export function updateToC(
+  { headings = [], sections = [] }: CachedMetadata,
+  editor: Editor,
+  settings: TableOfContentsPluginSettings
+): void {
+  const title = settings.title ? settings.title : "Table of Contents";
+  const tocHeading = headings.find((heading) =>
+    heading.heading.contains(title)
+  );
+
+  if (!tocHeading) {
+    new Notice("No ToC in this file to update");
+    return;
+  }
+
+  const tocParagraphIndex = sections.findIndex(
+    (section) => section.type === "heading"
+  );
+
+  const tocPosition = sections[tocParagraphIndex].position;
+  const listPosition = sections[tocParagraphIndex + 1].position;
+
+  const headingsCopy = [...headings];
+  // copy needed as the original object is kept in the state of the editor
+  headingsCopy.shift();
+
+  const cursor = editor.getCursor();
+  const toc = createToc(
+    { headings: headingsCopy },
+    cursor,
+    settings
+  )?.trimEnd();
+
+  if (toc)
+    editor.replaceRange(
+      toc,
+      { line: tocPosition.end.line, ch: 0 },
+      { line: listPosition.end.line, ch: listPosition.end.col }
+    );
+}
