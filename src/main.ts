@@ -189,7 +189,10 @@ export default class TableOfContentsPlugin extends Plugin {
       );
 
       if (toc) {
+        // pritning the ToC to the file
         editor.replaceRange(toc, cursor);
+        // moving the cursor 2 lines below the created ToC
+        editor.setCursor(cursor.line + toc.split("\n").length)
       }
     }
   };
