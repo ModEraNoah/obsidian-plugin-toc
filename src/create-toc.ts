@@ -1,4 +1,3 @@
-import endent from "endent";
 import { CachedMetadata, HeadingCache, Notice } from "obsidian";
 import { TableOfContentsPluginSettings } from "./types";
 import anchor from 'anchor-markdown-header';
@@ -61,12 +60,7 @@ export const createToc = (
   }
 
   if (!includedHeadings.length) {
-    new Notice(
-      endent`
-        No headings below cursor matched settings 
-        (min: ${settings.minimumDepth}) (max: ${settings.maximumDepth})
-      `
-    );
+    new Notice( `No headings below cursor matched settings (min: ${settings.minimumDepth}) (max: ${settings.maximumDepth})`);
     return;
   }
 
@@ -99,8 +93,5 @@ export const createToc = (
       return `${prefix} [${displayText}](#${linkText})`;
   });
 
-  return endent`
-    ${settings.title ? `${settings.title}\n` : "Table of Contents\n"}
-    ${`${links.join("\n")}\n`}
-  `;
+    return `${settings.title ? settings.title : "Table of Contents"}\n ${links.join("\n")}\n`
 };
