@@ -73,6 +73,7 @@ export const createToc = (
     const previousLevelHeading = getPreviousLevelHeading(includedHeadings, heading);
 
     const prefix = `${indent}${itemIndication}`;
+    //@ts-ignore
     let displayText = heading.heading.replaceAll("#", "").replaceAll("[", "").replaceAll("]", "");
     let linkText;
 
