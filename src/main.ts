@@ -7,7 +7,7 @@ import {
   Setting,
   ToggleComponent,
 } from "obsidian";
-import { createToc, getCurrentHeaderDepth } from "./create-toc";
+import { createToc, getCurrentHeaderDepth, updateToC } from "./create-toc";
 import { TableOfContentsPluginSettings } from "./types";
 
 export interface CursorPosition {
@@ -176,6 +176,12 @@ export default class TableOfContentsPlugin extends Plugin {
       }),
     });
 
+    this.addCommand({
+      id: "update-toc",
+      name: "Update table of contents",
+      callback: this.updateTocForActiveFile(),
+    });
+
     this.addSettingTab(new TableOfContentsSettingsTab(this.app, this));
   }
 
@@ -204,6 +210,23 @@ export default class TableOfContentsPlugin extends Plugin {
           // moving the cursor 2 lines below the created ToC
           editor.setCursor(cursor.line + toc.split("\n").length);
         }
+      }
+    };
+
+  private updateTocForActiveFile =
+    (settings: TableOfContentsPluginSettings | GetSettings = this.settings) =>
+    () => {
+      const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
+
+      if (activeView && activeView.file) {
+        const editor = activeView.editor;
+        const cursor = editor.getCursor();
+        const data = this.app.metadataCache.getFileCache(activeView.file) || {};
+        updateToC(
+          data,
+          editor,
+          typeof settings === "function" ? settings(data, cursor) : settings
+        );
       }
     };
 }
