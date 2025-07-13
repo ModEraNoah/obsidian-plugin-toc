@@ -1,9 +1,9 @@
 {
   "name": "obsidian-plugin-toc",
   "description": "Create a table of contents for obsidian.md notes.",
+  "main": "main.js",
   "scripts": {
-    "start": "obsidian-plugin dev src/main.ts",
-    "build": "obsidian-plugin build src/main.ts",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
     "lint": "eslint . --ext .ts,.tsx --fix",
     "release": "auto shipit"
   },
@@ -21,6 +21,8 @@
     "anchor-markdown-header": "^0.7.0",
     "auto": "^11.3.0",
     "auto-plugin-obsidian": "^0.1.4",
+    "builtin-modules": "^5.0.0",
+    "esbuild": "^0.25.6",
     "eslint": "9.31.0",
     "eslint-config-prettier": "^10.1.5",
     "obsidian": "latest",
