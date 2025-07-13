@@ -94,5 +94,5 @@ export const createToc = (
       return `${prefix} [${displayText}](#${linkText})`;
   });
 
-    return `${settings.title ? settings.title : "Table of Contents"}\n ${links.join("\n")}\n`
+    return `# ${settings.title ? settings.title : "Table of Contents"}\n ${links.join("\n")}\n`
 };
