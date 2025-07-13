@@ -21,7 +21,6 @@
     "anchor-markdown-header": "^0.7.0",
     "auto": "^10.16.7",
     "auto-plugin-obsidian": "^0.1.4",
-    "endent": "^2.0.1",
     "eslint": "7.12.1",
     "eslint-config-prettier": "^7.2.0",
     "obsidian": "obsidianmd/obsidian-api",
