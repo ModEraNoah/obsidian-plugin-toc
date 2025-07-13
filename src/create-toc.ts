@@ -79,17 +79,17 @@ export const createToc = (
     const previousLevelHeading = getPreviousLevelHeading(includedHeadings, heading);
 
     const prefix = `${indent}${itemIndication}`;
-    const displayText = heading.heading;
+    let displayText = heading.heading.replaceAll("#", "").replaceAll("[", "").replaceAll("]", "");
     let linkText;
 
     if (settings.useMarkdown && settings.githubCompat)
-      return `${prefix} ${anchor(heading.heading)}`;
+      return `${prefix} ${anchor(displayText)}`;
     else if (settings.useMarkdown) 
-      linkText = encodeURI(heading.heading);
+      linkText = encodeURI(displayText);
     else if (typeof previousLevelHeading == "undefined")
-      linkText = heading.heading;
+      linkText = displayText;
     else 
-      linkText = `${previousLevelHeading.heading}#${heading.heading}`;
+      linkText = `${previousLevelHeading.heading}#${displayText}`;
 
     // wikilink format
     if (!settings.useMarkdown)
