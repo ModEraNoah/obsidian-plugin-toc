@@ -100,7 +100,7 @@ export const createToc = (
   });
 
   return endent`
-    ${settings.title ? `${settings.title}\n` : ""}
+    ${settings.title ? `${settings.title}\n` : "Table of Contents\n"}
     ${`${links.join("\n")}\n`}
   `;
 };
