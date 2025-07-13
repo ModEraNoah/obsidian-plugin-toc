@@ -1,6 +1,6 @@
 import { CachedMetadata, HeadingCache, Notice } from "obsidian";
 import { TableOfContentsPluginSettings } from "./types";
-import anchor from 'anchor-markdown-header';
+import anchor from "anchor-markdown-header";
 
 export interface CursorPosition {
   line: number;
@@ -29,13 +29,16 @@ const getSubsequentHeadings = (
   return headings.filter((heading) => heading.position.end.line > cursor.line);
 };
 
-const getPreviousLevelHeading = (headings: HeadingCache[], currentHeading: HeadingCache) => {
+const getPreviousLevelHeading = (
+  headings: HeadingCache[],
+  currentHeading: HeadingCache
+) => {
   const index = headings.indexOf(currentHeading);
   const targetHeadings = headings.slice(0, index).reverse();
   return targetHeadings.find((item, _index, _array) => {
     return item.level == currentHeading.level - 1;
   });
-}
+};
 
 export const createToc = (
   { headings = [] }: CachedMetadata,
@@ -60,7 +63,9 @@ export const createToc = (
   }
 
   if (!includedHeadings.length) {
-    new Notice( `No headings below cursor matched settings (min: ${settings.minimumDepth}) (max: ${settings.maximumDepth})`);
+    new Notice(
+      `No headings below cursor matched settings (min: ${settings.minimumDepth}) (max: ${settings.maximumDepth})`
+    );
     return;
   }
 
@@ -70,28 +75,32 @@ export const createToc = (
     const indent = new Array(Math.max(0, heading.level - firstHeadingDepth))
       .fill("\t")
       .join("");
-    const previousLevelHeading = getPreviousLevelHeading(includedHeadings, heading);
+    const previousLevelHeading = getPreviousLevelHeading(
+      includedHeadings,
+      heading
+    );
 
     const prefix = `${indent}${itemIndication}`;
-    let displayText = heading.heading.replaceAll("#", "").replaceAll("[", "").replaceAll("]", "");
+    let displayText = heading.heading
+      .replaceAll("#", "")
+      .replaceAll("[", "")
+      .replaceAll("]", "");
     let linkText;
 
     if (settings.useMarkdown && settings.githubCompat)
       return `${prefix} ${anchor(displayText)}`;
-    else if (settings.useMarkdown) 
-      linkText = encodeURI(displayText);
-    else if (typeof previousLevelHeading == "undefined")
-      linkText = displayText;
-    else 
-      linkText = `${previousLevelHeading.heading}#${displayText}`;
+    else if (settings.useMarkdown) linkText = encodeURI(displayText);
+    else if (typeof previousLevelHeading == "undefined") linkText = displayText;
+    else linkText = `${previousLevelHeading.heading}#${displayText}`;
 
     // wikilink format
     if (!settings.useMarkdown)
       return `${prefix} [[#${linkText}|${displayText}]]`;
     // markdown format
-    else 
-      return `${prefix} [${displayText}](#${linkText})`;
+    else return `${prefix} [${displayText}](#${linkText})`;
   });
 
-    return `# ${settings.title ? settings.title : "Table of Contents"}\n ${links.join("\n")}\n`
+  return `# ${
+    settings.title ? settings.title : "Table of Contents"
+  }\n ${links.join("\n")}\n`;
 };

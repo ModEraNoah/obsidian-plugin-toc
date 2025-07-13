@@ -5,7 +5,7 @@ import {
   Plugin,
   PluginSettingTab,
   Setting,
-ToggleComponent,
+  ToggleComponent,
 } from "obsidian";
 import { createToc, getCurrentHeaderDepth } from "./create-toc";
 import { TableOfContentsPluginSettings } from "./types";
@@ -88,7 +88,7 @@ class TableOfContentsSettingsTab extends PluginSettingTab {
             this.plugin.saveData(this.plugin.settings);
           })
       );
-    
+
     new Setting(containerEl)
       .setName("Use Markdown links")
       .setDesc("Auto-generate Markdown links, instead of the default WikiLinks")
@@ -96,15 +96,21 @@ class TableOfContentsSettingsTab extends PluginSettingTab {
         value.setValue(this.plugin.settings.useMarkdown).onChange((value) => {
           this.plugin.settings.useMarkdown = value;
           this.plugin.saveData(this.plugin.settings);
-          if(!value) (githubSetting.components[0] as ToggleComponent).setValue(false)
-          githubSetting.setDisabled(!value)
+          if (!value)
+            (githubSetting.components[0] as ToggleComponent).setValue(false);
+          githubSetting.setDisabled(!value);
         })
       );
-    
-    const githubCompatDesc: DocumentFragment = new DocumentFragment()
-    githubCompatDesc.appendText("Github generates section links differently than Obsidian, this setting uses ")
-    githubCompatDesc.createEl('a', {href: "https://github.com/thlorenz/anchor-markdown-header", text: "anchor-markdown-header"})
-    githubCompatDesc.appendText(" to generate the proper links.")
+
+    const githubCompatDesc: DocumentFragment = new DocumentFragment();
+    githubCompatDesc.appendText(
+      "Github generates section links differently than Obsidian, this setting uses "
+    );
+    githubCompatDesc.createEl("a", {
+      href: "https://github.com/thlorenz/anchor-markdown-header",
+      text: "anchor-markdown-header",
+    });
+    githubCompatDesc.appendText(" to generate the proper links.");
 
     const githubSetting = new Setting(containerEl)
       .setName("Github compliant Markdown section links")
@@ -117,7 +123,7 @@ class TableOfContentsSettingsTab extends PluginSettingTab {
           .onChange((value) => {
             this.plugin.settings.githubCompat = value;
             this.plugin.saveData(this.plugin.settings);
-        })
+          })
       );
   }
 }
@@ -132,7 +138,7 @@ export default class TableOfContentsPlugin extends Plugin {
     minimumDepth: 2,
     maximumDepth: 6,
     listStyle: "bullet",
-    useMarkdown: false
+    useMarkdown: false,
   };
 
   public async onload(): Promise<void> {
@@ -173,31 +179,31 @@ export default class TableOfContentsPlugin extends Plugin {
     this.addSettingTab(new TableOfContentsSettingsTab(this.app, this));
   }
 
-  private createTocForActiveFile = (
-    settings: TableOfContentsPluginSettings | GetSettings = this.settings
-  ) => () => {
-    const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
+  private createTocForActiveFile =
+    (settings: TableOfContentsPluginSettings | GetSettings = this.settings) =>
+    () => {
+      const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
 
-    if (activeView && activeView.file) {
-      const editor = activeView.editor;
-      const cursor = editor.getCursor();
-      const data = this.app.metadataCache.getFileCache(activeView.file) || {};
-      const toc = createToc(
-        data,
-        cursor,
-        typeof settings === "function" ? settings(data, cursor) : settings
-      );
+      if (activeView && activeView.file) {
+        const editor = activeView.editor;
+        const cursor = editor.getCursor();
+        const data = this.app.metadataCache.getFileCache(activeView.file) || {};
+        const toc = createToc(
+          data,
+          cursor,
+          typeof settings === "function" ? settings(data, cursor) : settings
+        );
 
-      if (toc) {
-        if (editor.getSelection()) {
-          editor.replaceSelection(toc)
-        } else {
-        // pritning the ToC to the file
-          editor.replaceRange(toc, cursor);
+        if (toc) {
+          if (editor.getSelection()) {
+            editor.replaceSelection(toc);
+          } else {
+            // pritning the ToC to the file
+            editor.replaceRange(toc, cursor);
+          }
+          // moving the cursor 2 lines below the created ToC
+          editor.setCursor(cursor.line + toc.split("\n").length);
         }
-        // moving the cursor 2 lines below the created ToC
-        editor.setCursor(cursor.line + toc.split("\n").length)
       }
-    }
-  };
+    };
 }

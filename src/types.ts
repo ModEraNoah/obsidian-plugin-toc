@@ -3,6 +3,6 @@ export interface TableOfContentsPluginSettings {
   minimumDepth: number;
   maximumDepth: number;
   title?: string;
-  useMarkdown: boolean
-  githubCompat?: boolean
+  useMarkdown: boolean;
+  githubCompat?: boolean;
 }
