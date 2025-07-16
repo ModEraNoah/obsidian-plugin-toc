@@ -1,3 +1,12 @@
+# 0.3.0
+
+- ignore [[]] link syntax in heading
+- add default title to a ToC
+- replace current selection on ToC creation
+- add updating of existing ToC
+- allow to auto-update on file opening
+- updating dependencies
+
 # 0.2.0 (Thu May 11 2023)
 
 #### 🚀 Enhancement
@@ -169,37 +178,25 @@
 
 # 0.0.8 (Sun Feb 21 2021)
 
-
-
 ---
 
 # 0.0.8 (Sun Feb 21 2021)
-
-
 
 ---
 
 # 0.0.7 (Sun Feb 21 2021)
 
-
-
 ---
 
 # 0.0.6 (Sun Feb 21 2021)
 
-
-
 ---
 
 # 0.0.4 (Sun Feb 21 2021)
 
-
-
 ---
 
 # 0.0.4 (Sun Feb 21 2021)
-
-
 
 ---
 
