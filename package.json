@@ -1,5 +1,5 @@
 {
-  "name": "obsidian-plugin-toc",
+  "name": "obsidian-plugin-toc-mod",
   "description": "Create a table of contents for obsidian.md notes.",
   "main": "main.js",
   "scripts": {
@@ -11,8 +11,8 @@
     "obsidian.md",
     "plugin"
   ],
-  "author": "Andrew Lisowski <lisowski54@gmail.com>",
-  "repository": "hipstersmoothie/obsidian-plugin-toc",
+  "author": "ModEraNoah",
+  "repository": "ModEraNoah/obsidian-plugin-toc",
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^24.0.13",
