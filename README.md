@@ -1,4 +1,6 @@
-# obsidian-plugin-toc
+# obsidian-plugin-toc-mod
+
+! This is only a fork of obsidian-plugin-toc !
 
 Create a table of contents for a note.
 
