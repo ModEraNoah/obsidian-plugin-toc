@@ -5,6 +5,7 @@ import {
   Plugin,
   PluginSettingTab,
   Setting,
+  TFile,
   ToggleComponent,
 } from "obsidian";
 import { createToc, getCurrentHeaderDepth, updateToC } from "./create-toc";
@@ -28,6 +29,18 @@ class TableOfContentsSettingsTab extends PluginSettingTab {
     containerEl.empty();
 
     containerEl.createEl("h2", { text: "Table of Contents - Settings" });
+
+    new Setting(containerEl)
+      .setName("Update ToC on File Opening")
+      .setDesc("Starts to update the ToC of a freshly opened file")
+      .addToggle((value) =>
+        value
+          .setValue(this.plugin.settings.hookOnFileOpen)
+          .onChange((value) => {
+            this.plugin.settings.hookOnFileOpen = value;
+            this.plugin.saveData(this.plugin.settings);
+          })
+      );
 
     new Setting(containerEl)
       .setName("List Style")
@@ -139,6 +152,7 @@ export default class TableOfContentsPlugin extends Plugin {
     maximumDepth: 6,
     listStyle: "bullet",
     useMarkdown: false,
+    hookOnFileOpen: false,
   };
 
   public async onload(): Promise<void> {
@@ -182,6 +196,16 @@ export default class TableOfContentsPlugin extends Plugin {
       callback: this.updateTocForActiveFile(),
     });
 
+    this.registerEvent(
+      this.app.workspace.on("file-open", (file: TFile | null) => {
+        if (this.settings.hookOnFileOpen) {
+          // sleep needed as otherwise it wont be called all the time on a file opening
+          sleep(80).then(() => {
+            this.updateTocForActiveFile()();
+          });
+        }
+      })
+    );
     this.addSettingTab(new TableOfContentsSettingsTab(this.app, this));
   }
 
